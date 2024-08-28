@@ -62,29 +62,30 @@ st.title("CSV Wrangler")
 
 
 c29, c30, c31 = st.columns([1, 6, 1])
+shows = pd.read_csv("lun_orenda.csv")
 
-with c30:
-
-    uploaded_file = st.file_uploader(
-        "",
-        key="1",
-        help="To activate 'wide mode', go to the hamburger menu > Settings > turn on 'wide mode'",
-    )
-
-    if uploaded_file is not None:
-        file_container = st.expander("Check your uploaded .csv")
-        shows = pd.read_csv(uploaded_file)
-        uploaded_file.seek(0)
-        file_container.write(shows)
-
-    else:
-        st.info(
-            f"""
-                👆 Upload a .csv file first. Sample to try: [biostats.csv](https://people.sc.fsu.edu/~jburkardt/data/csv/biostats.csv)
-                """
-        )
-
-        st.stop()
+# with c30:
+#
+#     uploaded_file = st.file_uploader(
+#         "",
+#         key="1",
+#         help="To activate 'wide mode', go to the hamburger menu > Settings > turn on 'wide mode'",
+#     )
+#
+#     if uploaded_file is not None:
+#         file_container = st.expander("Check your uploaded .csv")
+#         shows = pd.read_csv(uploaded_file)
+#         uploaded_file.seek(0)
+#         file_container.write(shows)
+#
+#     else:
+#         st.info(
+#             f"""
+#                 👆 Upload a .csv file first. Sample to try: [biostats.csv](https://people.sc.fsu.edu/~jburkardt/data/csv/biostats.csv)
+#                 """
+#         )
+#
+#         st.stop()
 
 from st_aggrid import GridUpdateMode, DataReturnMode
 
@@ -114,6 +115,17 @@ df = pd.DataFrame(response["selected_rows"])
 
 st.subheader("Filtered data will appear below 👇 ")
 st.text("")
+
+# pd.io.formats.style.Styler(
+#     df,
+#     caption="Filtered rows"
+# )
+
+df.style.set_table_styles([
+    {'selector': 'th.col_heading', 'props': 'text-align: center;'},
+    {'selector': 'th.col_heading.level0', 'props': 'font-size: 1.5em;'},
+    {'selector': 'td', 'props': 'text-align: center; font-weight: bold;'},
+], overwrite=True)
 
 st.table(df)
 
